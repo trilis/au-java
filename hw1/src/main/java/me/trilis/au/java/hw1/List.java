@@ -1,6 +1,7 @@
 package me.trilis.au.java.hw1;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Implementation of doubly linked list with elements of the specified
@@ -47,7 +48,7 @@ public class List<T> implements Iterable<T> {
             public T next() {
                 currentNode = currentNode.nextNode;
                 if (currentNode == null) {
-                    return null;
+                    throw new NoSuchElementException();
                 }
                 return currentNode.value;
             }

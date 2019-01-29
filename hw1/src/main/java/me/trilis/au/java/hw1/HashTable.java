@@ -98,6 +98,9 @@ public class HashTable {
      * or false otherwise.
      */
     public boolean contains(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null");
+        }
         var bucket = getBucket(key);
         for (var entry : bucket) {
             if (entry.key.equals(key)) {
@@ -115,6 +118,9 @@ public class HashTable {
      * if this hash table contains the specified key or null otherwise.
      */
     public String get(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null");
+        }
         var bucket = getBucket(key);
         for (var entry : bucket) {
             if (entry.key.equals(key)) {
@@ -133,6 +139,12 @@ public class HashTable {
      * table didn't contain the specified key.
      */
     public String put(String key, String value) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("value is null");
+        }
         var bucket = getBucket(key);
         for (var entry : bucket) {
             if (entry.key.equals(key)) {
@@ -157,6 +169,9 @@ public class HashTable {
      * or null otherwise.
      */
     public String remove(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null");
+        }
         var bucket = getBucket(key);
         Entry entry;
         for (Iterator<Entry> iterator = bucket.iterator(); iterator.hasNext(); ) {
