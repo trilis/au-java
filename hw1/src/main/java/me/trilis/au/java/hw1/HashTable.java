@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * Implementation of hash table with strings as both keys and values.
- * Open addressing is used as a method of collision resolution
+ * Closed addressing is used as a method of collision resolution
  */
 public class HashTable {
 
