@@ -12,7 +12,7 @@ public class HashTable {
     static private final double DEFAULT_LOAD_FACTOR = 0.75;
     static private final int GROWTH_FACTOR = 2;
 
-    private List<Entry>[] buckets;
+    private LinkedList<Entry>[] buckets;
     private int size = 0;
     private double loadFactor = DEFAULT_LOAD_FACTOR;
 
@@ -21,9 +21,9 @@ public class HashTable {
      * default load factor (0.75).
      */
     public HashTable() {
-        buckets = new List[DEFAULT_BUCKET_NUMBER];
+        buckets = new LinkedList[DEFAULT_BUCKET_NUMBER];
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new List<>();
+            buckets[i] = new LinkedList<>();
         }
     }
 
@@ -34,9 +34,9 @@ public class HashTable {
      * @param bucketNumber the specified initial bucket number.
      */
     public HashTable(int bucketNumber) {
-        buckets = new List[bucketNumber];
+        buckets = new LinkedList[bucketNumber];
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new List<>();
+            buckets[i] = new LinkedList<>();
         }
     }
 
@@ -48,14 +48,14 @@ public class HashTable {
      * @param loadFactor   the specified load factor.
      */
     public HashTable(int bucketNumber, double loadFactor) {
-        buckets = new List[bucketNumber];
+        buckets = new LinkedList[bucketNumber];
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new List<>();
+            buckets[i] = new LinkedList<>();
         }
         this.loadFactor = loadFactor;
     }
 
-    private List<Entry> getBucket(String string) {
+    private LinkedList<Entry> getBucket(String string) {
         var hash = string.hashCode();
         return buckets[hash % buckets.length];
     }
@@ -65,15 +65,15 @@ public class HashTable {
      * reorganizes this hash table.
      */
     private void rehash() {
-        var entries = new List<Entry>();
-        for (List<Entry> bucket : buckets) {
+        var entries = new LinkedList<Entry>();
+        for (LinkedList<Entry> bucket : buckets) {
             for (var entry : bucket) {
                 entries.add(entry);
             }
         }
-        buckets = new List[buckets.length * GROWTH_FACTOR];
+        buckets = new LinkedList[buckets.length * GROWTH_FACTOR];
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new List<>();
+            buckets[i] = new LinkedList<>();
         }
         size = 0;
         for (var entry : entries) {
@@ -190,9 +190,9 @@ public class HashTable {
      */
     public void clear() {
         size = 0;
-        buckets = new List[DEFAULT_BUCKET_NUMBER];
+        buckets = new LinkedList[DEFAULT_BUCKET_NUMBER];
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new List<>();
+            buckets[i] = new LinkedList<>();
         }
     }
 
