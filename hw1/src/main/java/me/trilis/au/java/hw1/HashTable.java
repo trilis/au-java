@@ -20,6 +20,7 @@ public class HashTable {
      * Creates new hash table with default initial bucket number (10) and
      * default load factor (0.75).
      */
+    @SuppressWarnings("unchecked")
     public HashTable() {
         buckets = new LinkedList[DEFAULT_BUCKET_NUMBER];
         for (int i = 0; i < buckets.length; i++) {
@@ -33,6 +34,7 @@ public class HashTable {
      *
      * @param bucketNumber the specified initial bucket number.
      */
+    @SuppressWarnings("unchecked")
     public HashTable(int bucketNumber) {
         buckets = new LinkedList[bucketNumber];
         for (int i = 0; i < buckets.length; i++) {
@@ -47,6 +49,7 @@ public class HashTable {
      * @param bucketNumber the specified initial bucket number.
      * @param loadFactor   the specified load factor.
      */
+    @SuppressWarnings("unchecked")
     public HashTable(int bucketNumber, double loadFactor) {
         buckets = new LinkedList[bucketNumber];
         for (int i = 0; i < buckets.length; i++) {
@@ -64,6 +67,7 @@ public class HashTable {
      * Increases bucket number by {@code GROWTH_FACTOR} times and internally
      * reorganizes this hash table.
      */
+    @SuppressWarnings("unchecked")
     private void rehash() {
         var entries = new LinkedList<Entry>();
         for (LinkedList<Entry> bucket : buckets) {
@@ -188,6 +192,7 @@ public class HashTable {
     /**
      * Removes all entries from this hash table.
      */
+    @SuppressWarnings("unchecked")
     public void clear() {
         size = 0;
         buckets = new LinkedList[DEFAULT_BUCKET_NUMBER];
