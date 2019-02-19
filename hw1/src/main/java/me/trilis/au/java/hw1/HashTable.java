@@ -49,7 +49,7 @@ public class HashTable {
     }
 
     private LinkedList<Entry> getBucket(String string) {
-        var hash = string.hashCode();
+        var hash = Math.abs(string.hashCode());
         return buckets[hash % buckets.length];
     }
 
