@@ -12,7 +12,7 @@ public class HashTable {
 
     private LinkedList<Entry>[] buckets;
     private int size = 0;
-    private double loadFactor;
+    private final double loadFactor;
 
     /**
      * Creates new hash table with default initial bucket number (10) and
@@ -61,9 +61,7 @@ public class HashTable {
     private void rehash() {
         var entries = new LinkedList<Entry>();
         for (LinkedList<Entry> bucket : buckets) {
-            for (var entry : bucket) {
-                entries.add(entry);
-            }
+            entries.addAll(bucket);
         }
         buckets = new LinkedList[buckets.length * GROWTH_FACTOR];
         for (int i = 0; i < buckets.length; i++) {
@@ -168,7 +166,7 @@ public class HashTable {
         }
         var bucket = getBucket(key);
         Entry entry;
-        for (Iterator<Entry> iterator = bucket.iterator(); iterator.hasNext(); ) {
+        for (var iterator = bucket.iterator(); iterator.hasNext(); ) {
             entry = iterator.next();
             if (entry.key.equals(key)) {
                 iterator.remove();
