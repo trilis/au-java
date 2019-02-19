@@ -1,7 +1,5 @@
 package me.trilis.au.java.hw1;
 
-import java.util.Iterator;
-
 /**
  * Implementation of hash table with strings as both keys and values.
  * Closed addressing is used as a method of collision resolution
@@ -14,18 +12,14 @@ public class HashTable {
 
     private LinkedList<Entry>[] buckets;
     private int size = 0;
-    private double loadFactor = DEFAULT_LOAD_FACTOR;
+    private double loadFactor;
 
     /**
      * Creates new hash table with default initial bucket number (10) and
      * default load factor (0.75).
      */
-    @SuppressWarnings("unchecked")
     public HashTable() {
-        buckets = new LinkedList[DEFAULT_BUCKET_NUMBER];
-        for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new LinkedList<>();
-        }
+        this(DEFAULT_BUCKET_NUMBER, DEFAULT_LOAD_FACTOR);
     }
 
     /**
@@ -34,12 +28,8 @@ public class HashTable {
      *
      * @param bucketNumber the specified initial bucket number.
      */
-    @SuppressWarnings("unchecked")
     public HashTable(int bucketNumber) {
-        buckets = new LinkedList[bucketNumber];
-        for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new LinkedList<>();
-        }
+        this(bucketNumber, DEFAULT_LOAD_FACTOR);
     }
 
     /**
