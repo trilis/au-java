@@ -63,4 +63,15 @@ public class HashTableTest {
         }
     }
 
+    @Test
+    public void testNulls() {
+        var hashTable = new HashTable();
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put("", null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.get(null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.contains(null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.remove(null));
+    }
+
 }
