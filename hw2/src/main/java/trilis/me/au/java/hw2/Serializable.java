@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Interface for data structures which contents are able to be
+ * serialized, read from InputStream and written to OutputStream.
+ */
 public interface Serializable {
 
     /**
@@ -19,5 +23,5 @@ public interface Serializable {
      *
      * @param in the specified input stream.
      */
-    void deserialize(InputStream in) throws IOException;
+    void deserialize(InputStream in);
 }

@@ -6,65 +6,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/**
- * Implementation of trie data structure for strings.
- */
+/** Implementation of trie data structure for strings */
 public class Trie implements Serializable {
 
-    private class Node {
-        private final HashMap<Character, Node> children = new HashMap<>();
-        private Node parent;
-        private boolean isTerminal = false;
-        private int size = 0;
-
-        private Node() {
-        }
-
-        private Node(Node parent) {
-            this.parent = parent;
-        }
-
-        private void updateSize(int change) {
-            size += change;
-            if (parent != null) {
-                parent.updateSize(change);
-            }
-        }
-
-        private StringBuilder serialize(StringBuilder output) {
-            output.append(children.size());
-            output.append(' ');
-            if (isTerminal) {
-                output.append(1);
-            } else {
-                output.append(0);
-            }
-            output.append(' ');
-            for (var child : children.entrySet()) {
-                output.append((int) child.getKey());
-                output.append(' ');
-                child.getValue().serialize(output);
-            }
-            return output;
-        }
-
-        private void deserialize(Scanner scanner) {
-            var newSize = scanner.nextInt();
-            int terminal = scanner.nextInt();
-            if (terminal == 1) {
-                isTerminal = true;
-            } else if (terminal == 0) {
-                isTerminal = false;
-            } else {
-                throw new IllegalStateException();
-            }
-            for (int i = 0; i < newSize; i++) {
-                Node child = new Node(this);
-                children.put((char) scanner.nextInt(), child);
-                child.deserialize(scanner);
-            }
-        }
-    }
+    private Node root = new Node();
 
     private Node traverse(String element) {
         var currentNode = root;
@@ -162,9 +107,7 @@ public class Trie implements Serializable {
         return root.size;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void serialize(OutputStream out) throws IOException {
         out.write(root.serialize(new StringBuilder()).toString().getBytes());
@@ -172,16 +115,65 @@ public class Trie implements Serializable {
 
     /**
      * @inheritDoc
+     * @throws IllegalStateException if input data is invalid.
      */
     @Override
-    @SuppressWarnings("RedundantThrows")
-    public void deserialize(InputStream in) throws IOException {
+    public void deserialize(InputStream in)  {
         var scanner = new Scanner(in);
         var newRoot = new Node();
         newRoot.deserialize(scanner);
         root = newRoot;
     }
 
-    private Node root = new Node();
+    private class Node {
+        private final HashMap<Character, Node> children = new HashMap<>();
+        private Node parent;
+        private boolean isTerminal = false;
+        private int size = 0;
+
+        private Node() {
+        }
+
+        private Node(Node parent) {
+            this.parent = parent;
+        }
+
+        private void updateSize(int change) {
+            size += change;
+            if (parent != null) {
+                parent.updateSize(change);
+            }
+        }
+
+        private StringBuilder serialize(StringBuilder output) {
+            output.append(children.size());
+            output.append(' ');
+            output.append(isTerminal ? 1 : 0);
+            output.append(' ');
+            for (var child : children.entrySet()) {
+                output.append((int) child.getKey());
+                output.append(' ');
+                child.getValue().serialize(output);
+            }
+            return output;
+        }
+
+        private void deserialize(Scanner scanner) {
+            var newSize = scanner.nextInt();
+            int terminal = scanner.nextInt();
+            if (terminal == 1) {
+                isTerminal = true;
+            } else if (terminal == 0) {
+                isTerminal = false;
+            } else {
+                throw new IllegalStateException();
+            }
+            for (int i = 0; i < newSize; i++) {
+                Node child = new Node(this);
+                children.put((char) scanner.nextInt(), child);
+                child.deserialize(scanner);
+            }
+        }
+    }
 
 }
