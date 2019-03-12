@@ -1,5 +1,11 @@
-language: java
-jdk: openjdk11
-env:
-- PROJECT_DIR=hw1
-before_script: cd $PROJECT_DIR
+- language: java
+  jdk: openjdk11
+  env:
+  - PROJECT_DIR=hw1
+  before_script: cd $PROJECT_DIR 
+
+- language: java
+  jdk: openjdk11
+  env:
+  - PROJECT_DIR=test1
+  before_script: cd $PROJECT_DIR 
