@@ -1,8 +1,8 @@
 package me.trilis.au.java.hw1;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HashTableTest {
 
@@ -61,6 +61,17 @@ public class HashTableTest {
             assertEquals(i, hashTable.size());
             hashTable.put(String.valueOf(i), String.valueOf(i * i));
         }
+    }
+
+    @Test
+    public void testNulls() {
+        var hashTable = new HashTable();
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put("", null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.get(null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.contains(null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.remove(null));
     }
 
 }
