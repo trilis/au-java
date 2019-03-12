@@ -7,3 +7,7 @@ matrix:
     - language: java
       jdk: openjdk11
       before_script: cd test1
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test2
