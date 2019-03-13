@@ -9,9 +9,7 @@ import java.util.*;
  */
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
-    /**
-     * Creates empty set with natural ordering as comparator.
-     */
+    /** Creates empty set with natural ordering as comparator. */
     @SuppressWarnings("unchecked")
     public TreeSet() {
         comparator = (o1, o2) -> ((Comparable<? super E>) o1).compareTo(o2);
@@ -26,9 +24,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         this.comparator = comparator;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public boolean add(E e) {
         var currentNode = root;
@@ -58,9 +54,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
@@ -73,24 +67,18 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Iterator<E> iterator() {
         return new Iterator<>() {
 
-            /**
-             * @inheritDoc
-             */
+            /** @inheritDoc */
             @Override
             public boolean hasNext() {
                 return currentNode != null;
             }
 
-            /**
-             * @inheritDoc
-             */
+            /** @inheritDoc */
             @Override
             public E next() {
                 if (currentNode == null) {
@@ -106,17 +94,13 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         };
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public int size() {
         return size;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Iterator<E> descendingIterator() {
         return new Iterator<>() {
@@ -141,17 +125,13 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         };
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public MyTreeSet<E> descendingSet() {
         return descendingSet;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E first() {
         if (size == 0) {
@@ -160,9 +140,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return leftmostNode().value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E last() {
         if (size == 0) {
@@ -171,9 +149,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return rightmostNode().value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E lower(E e) {
         var node = find(root, e);
@@ -190,9 +166,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return previousNode.value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E floor(E e) {
         var node = find(root, e);
@@ -209,9 +183,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return previousNode.value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E ceiling(E e) {
         var node = find(root, e);
@@ -228,9 +200,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return nextNode.value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public E higher(E e) {
         var node = find(root, e);
@@ -364,97 +334,73 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     private class DescendingSet extends AbstractSet<E> implements MyTreeSet<E> {
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public Iterator<E> iterator() {
             return TreeSet.this.descendingIterator();
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public int size() {
             return TreeSet.this.size();
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public Iterator<E> descendingIterator() {
             return TreeSet.this.iterator();
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public MyTreeSet<E> descendingSet() {
             return TreeSet.this;
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E first() {
             return TreeSet.this.last();
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E last() {
             return TreeSet.this.first();
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E lower(E e) {
             return TreeSet.this.higher(e);
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E floor(E e) {
             return TreeSet.this.ceiling(e);
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E ceiling(E e) {
             return TreeSet.this.floor(e);
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public E higher(E e) {
             return TreeSet.this.lower(e);
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public boolean add(E e) {
             return TreeSet.this.add(e);
         }
 
-        /**
-         * @inheritDoc
-         */
+        /** @inheritDoc */
         @Override
         public boolean remove(Object o) {
             return TreeSet.this.remove(o);
