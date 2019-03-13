@@ -5,16 +5,37 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 
+/**
+ * This class contains methods for creating compilable .java files describing
+ * structure of Class objects and comparing fields and methods in different Class objects.
+ */
 public class Reflector {
 
+    /**
+     * Creates .java file for the specified class with the name of this class,
+     * then prints there all declared fields, methods, inner and nested classes for this class.
+     * Resulting file is valid .java file and can be compiled. All implementations of methods
+     * there are replaced with throwing UnsupportedOperationException, all final fields are initialized
+     * with null for non-primitive types, false for boolean and 0 for other primitive types.
+     * @throws FileNotFoundException if this method was not able to create .java file.
+     */
     public static void printStructure(Class<?> someClass) throws FileNotFoundException {
         var writer = new PrintWriter(new File(someClass.getSimpleName() + ".java"));
         writer.print(printClass(someClass, 0));
         writer.close();
     }
 
+    /**
+     * Compares fields and methods of two classes, finds unique fields and methods for
+     * each of them, then writes result in the specified PrintStream. Fields are considered
+     * equal if they share modifiers, type and name. Methods are considered equal
+     * if they share modifiers, return type, type parameters, name, types and names of
+     * all parameters and exceptions.
+     */
     public static void diffClasses(Class<?> a, Class<?> b, PrintStream out) {
         var aFields = getFieldWrappers(a);
         var bFields = getFieldWrappers(b);
@@ -74,16 +95,24 @@ public class Reflector {
             return result;
         }
         result.append(printDeclaration(someClass, someClass.getSimpleName(), indentation));
-        for (var constructor : someClass.getConstructors()) {
+        var constructors = someClass.getDeclaredConstructors();
+        Arrays.sort(constructors, Comparator.comparing(Constructor::getName));
+        for (var constructor : constructors) {
             result.append(printConstructor(constructor, indentation + 1));
         }
-        for (var field : someClass.getDeclaredFields()) {
+        var fields = someClass.getDeclaredFields();
+        Arrays.sort(fields, Comparator.comparing(Field::getName));
+        for (var field : fields) {
             result.append(printField(field, indentation + 1));
         }
-        for (var method : someClass.getDeclaredMethods()) {
+        var methods = someClass.getDeclaredMethods();
+        Arrays.sort(methods, Comparator.comparing(Method::toString));
+        for (var method : methods) {
             result.append(printMethod(method, indentation + 1));
         }
-        for (var clazz : someClass.getDeclaredClasses()) {
+        var classes = someClass.getDeclaredClasses();
+        Arrays.sort(classes, Comparator.comparing(Class::getName));
+        for (var clazz : classes) {
             result.append(printClass(clazz, indentation + 1));
         }
         result.append(printIndentation(indentation)).append("}\n");
@@ -98,6 +127,8 @@ public class Reflector {
         }
         result.append(printIndentation(indentation))
                 .append(printModifiers(constructor.getModifiers()))
+                .append(printTypeParameters(constructor.getTypeParameters()))
+                .append(' ')
                 .append(constructor.getDeclaringClass().getSimpleName())
                 .append('(')
                 .append(printParameters(constructor.getParameters()))
@@ -105,7 +136,7 @@ public class Reflector {
                 .append(printExceptions(constructor.getGenericExceptionTypes()))
                 .append(" {\n")
                 .append(printIndentation(indentation + 1))
-                .append("throw new UnsupportedOperationException();\n")
+                .append("throw new ();\n")
                 .append(printIndentation(indentation))
                 .append("}\n");
         return result;
@@ -128,6 +159,8 @@ public class Reflector {
         }
         result.append(printIndentation(indentation))
                 .append(printModifiers(method.getModifiers()))
+                .append(printTypeParameters(method.getTypeParameters()))
+                .append(' ')
                 .append(method.getGenericReturnType())
                 .append(' ')
                 .append(method.getName())
@@ -141,6 +174,7 @@ public class Reflector {
     private static StringBuilder printExceptions(Type[] exceptions) {
         var result = new StringBuilder();
         var isFirstException = true;
+        Arrays.sort(exceptions, Comparator.comparing(Type::getTypeName));
         for (var exception : exceptions) {
             if (!isFirstException) {
                 result.append(", ");
@@ -214,15 +248,17 @@ public class Reflector {
             result.append(" extends ");
             result.append(someClass.getGenericSuperclass().getTypeName());
         }
-        boolean isFirstInterface = true;
-        for (var clazz : someClass.getGenericInterfaces()) {
+        var isFirstInterface = true;
+        var interfaces = someClass.getGenericInterfaces();
+        Arrays.sort(interfaces, Comparator.comparing(Type::getTypeName));
+        for (var type : interfaces) {
             if (!isFirstInterface) {
                 result.append(", ");
             } else {
                 result.append(" implements ");
                 isFirstInterface = false;
             }
-            result.append(clazz.getTypeName());
+            result.append(type.getTypeName());
         }
         result.append(" {")
                 .append("\n");
@@ -230,20 +266,23 @@ public class Reflector {
     }
 
     private static StringBuilder printTypeParameters(
-            TypeVariable<? extends Class<?>>[] typeParameters) {
+            TypeVariable<?>[] typeParameters) {
         var result = new StringBuilder();
         if (typeParameters.length == 0) {
             return result;
         }
         result.append('<');
-        boolean isFirstParameter = true;
+        var isFirstParameter = true;
+        Arrays.sort(typeParameters, Comparator.comparing(TypeVariable::getName));
         for (var typeParameter : typeParameters) {
             if (!isFirstParameter) {
                 result.append(", ");
             }
             result.append(typeParameter.getName());
-            boolean isFirstBound = true;
-            for (var bound : typeParameter.getBounds()) {
+            var isFirstBound = true;
+            var bounds = typeParameter.getBounds();
+            Arrays.sort(bounds, Comparator.comparing(Type::getTypeName));
+            for (var bound : bounds) {
                 if (bound.getTypeName().equals("java.lang.Object")) {
                     continue;
                 }
