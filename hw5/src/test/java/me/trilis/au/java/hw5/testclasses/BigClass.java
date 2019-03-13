@@ -11,7 +11,11 @@ public class BigClass {
     Set<Integer> s;
     final boolean x = true;
 
-    public BigClass() {
+    public <T, S extends T> void generics(T t, S s) {
+
+    }
+
+    public <T> BigClass(T t) {
 
     }
 
@@ -23,9 +27,11 @@ public class BigClass {
         public OtherClass(T t) {
 
         }
+
         int c;
 
-        void main(T t) {}
+        void main(T t) {
+        }
     }
 
     public interface Interface {

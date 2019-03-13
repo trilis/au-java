@@ -21,6 +21,7 @@ public class Reflector {
      * Resulting file is valid .java file and can be compiled. All implementations of methods
      * there are replaced with throwing UnsupportedOperationException, all final fields are initialized
      * with null for non-primitive types, false for boolean and 0 for other primitive types.
+     *
      * @throws FileNotFoundException if this method was not able to create .java file.
      */
     public static void printStructure(Class<?> someClass) throws FileNotFoundException {
@@ -119,32 +120,33 @@ public class Reflector {
         return result;
     }
 
-    private static StringBuilder printConstructor(Constructor<?> constructor,
-                                                  int indentation) {
+    private static StringBuilder printExecutableBeginning(Executable executable,
+                                                          int indentation) {
         var result = new StringBuilder();
-        if (constructor.isSynthetic()) {
+        if (executable.isSynthetic()) {
             return result;
         }
         result.append(printIndentation(indentation))
-                .append(printModifiers(constructor.getModifiers()))
-                .append(printTypeParameters(constructor.getTypeParameters()))
-                .append(' ')
-                .append(constructor.getDeclaringClass().getSimpleName())
+                .append(printModifiers(executable.getModifiers()));
+        if (executable.getTypeParameters().length > 0) {
+            result.append(printTypeParameters(executable.getTypeParameters()))
+                    .append(' ');
+        }
+        return result;
+    }
+
+    private static StringBuilder printConstructor(Constructor<?> constructor,
+                                                  int indentation) {
+        var result = printExecutableBeginning(constructor, indentation);
+        if (constructor.isSynthetic()) {
+            return result;
+        }
+        result.append(constructor.getDeclaringClass().getSimpleName())
                 .append('(')
                 .append(printParameters(constructor.getParameters()))
                 .append(")")
                 .append(printExceptions(constructor.getGenericExceptionTypes()))
                 .append(" {\n")
-                .append(printIndentation(indentation + 1))
-                .append("throw new ();\n")
-                .append(printIndentation(indentation))
-                .append("}\n");
-        return result;
-    }
-
-    private static StringBuilder printMethod(Method method, int indentation) {
-        var result = printMethodDeclaration(method, indentation);
-        result.append(" {\n")
                 .append(printIndentation(indentation + 1))
                 .append("throw new UnsupportedOperationException();\n")
                 .append(printIndentation(indentation))
@@ -152,16 +154,26 @@ public class Reflector {
         return result;
     }
 
+    private static StringBuilder printMethod(Method method, int indentation) {
+        var result = printMethodDeclaration(method, indentation);
+        if (!Modifier.isAbstract(method.getModifiers())) {
+            result.append(" {\n")
+                    .append(printIndentation(indentation + 1))
+                    .append("throw new UnsupportedOperationException();\n")
+                    .append(printIndentation(indentation))
+                    .append("}\n");
+        } else {
+            result.append(";\n");
+        }
+        return result;
+    }
+
     private static StringBuilder printMethodDeclaration(Method method, int indentation) {
-        var result = new StringBuilder();
+        var result = printExecutableBeginning(method, indentation);
         if (method.isSynthetic()) {
             return result;
         }
-        result.append(printIndentation(indentation))
-                .append(printModifiers(method.getModifiers()))
-                .append(printTypeParameters(method.getTypeParameters()))
-                .append(' ')
-                .append(method.getGenericReturnType())
+        result.append(method.getGenericReturnType().getTypeName())
                 .append(' ')
                 .append(method.getName())
                 .append('(')
