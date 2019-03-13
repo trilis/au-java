@@ -163,6 +163,7 @@ public class Trie implements Serializable {
             int terminal = scanner.nextInt();
             if (terminal == 1) {
                 isTerminal = true;
+                size = 1;
             } else if (terminal == 0) {
                 isTerminal = false;
             } else {
@@ -172,6 +173,7 @@ public class Trie implements Serializable {
                 Node child = new Node(this);
                 children.put((char) scanner.nextInt(), child);
                 child.deserialize(scanner);
+                size += child.size;
             }
         }
     }
