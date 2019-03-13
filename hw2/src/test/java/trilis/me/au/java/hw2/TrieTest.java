@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -81,7 +82,52 @@ public class TrieTest {
     }
 
     @Test
-    public void testSerialization() throws IOException {
+    public void testSerializationOneString() throws IOException {
+        var out = new ByteArrayOutputStream();
+        Trie trie = new Trie();
+        trie.add("abacaba");
+        trie.serialize(out);
+        var expectedOut = new ByteArrayOutputStream();
+        var expectedData = new DataOutputStream(expectedOut);
+        expectedData.writeBytes(
+        "1 0 97 1 0 98 1 0 97 1 0 99 1 0 97 1 0 98 1 0 97 0 1 ");
+        assertArrayEquals(expectedOut.toByteArray(), out.toByteArray());
+    }
+
+    @Test
+    public void testSerializationManyStrings() throws IOException {
+        var out = new ByteArrayOutputStream();
+        Trie trie = new Trie();
+        trie.add("abc");
+        trie.add("abb");
+        trie.add("bab");
+        trie.add("bca");
+        trie.serialize(out);
+        var expectedOut = new ByteArrayOutputStream();
+        var expectedData = new DataOutputStream(expectedOut);
+        expectedData.writeBytes(
+        "2 0 97 1 0 98 2 0 98 0 1 99 0 1 98 2 0 97 1 0 98 0 1 99 1 0 97 0 1 ");
+        System.out.println(out.toString());
+        assertArrayEquals(expectedOut.toByteArray(), out.toByteArray());
+    }
+
+    @Test
+    public void testDeserialization() {
+        var in = new ByteArrayInputStream(("2 1 120 2 1 120 1 0 120 0 1 121 2 0 97" +
+                " 1 0 100 0 1 121 0 1 121 1 0 120 1 0 97 0 1 ").getBytes());
+        Trie trie = new Trie();
+        trie.deserialize(in);
+        assertEquals(6, trie.size());
+        assertTrue(trie.contains("xxx"));
+        assertTrue(trie.contains("xyad"));
+        assertTrue(trie.contains("x"));
+        assertTrue(trie.contains("yxa"));
+        assertTrue(trie.contains(""));
+        assertTrue(trie.contains("xyy"));
+    }
+
+    @Test
+    public void testSerializationDeserialization() throws IOException {
         Random random = new Random(0);
         Trie trie = new Trie();
         var strings = new ArrayList<String>();
