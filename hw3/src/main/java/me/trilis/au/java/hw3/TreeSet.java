@@ -9,6 +9,11 @@ import java.util.*;
  */
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
+    private Node root = null;
+    private final Comparator<? super E> comparator;
+    private int size = 0;
+    private final DescendingSet descendingSet = new DescendingSet();
+
     /** Creates empty set with natural ordering as comparator. */
     @SuppressWarnings("unchecked")
     public TreeSet() {
@@ -152,69 +157,51 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     /** @inheritDoc */
     @Override
     public E lower(E e) {
-        var node = find(root, e);
-        if (node == null) {
-            return null;
-        }
-        if (comparator.compare(node.value, e) < 0) {
-            return node.value;
-        }
-        var previousNode = previousNode(node);
-        if (previousNode == null) {
-            return null;
-        }
-        return previousNode.value;
+        return findNextTo(e, true, true);
     }
 
     /** @inheritDoc */
     @Override
     public E floor(E e) {
-        var node = find(root, e);
-        if (node == null) {
-            return null;
-        }
-        if (comparator.compare(node.value, e) <= 0) {
-            return node.value;
-        }
-        var previousNode = previousNode(node);
-        if (previousNode == null) {
-            return null;
-        }
-        return previousNode.value;
+        return findNextTo(e, true, false);
     }
 
     /** @inheritDoc */
     @Override
     public E ceiling(E e) {
-        var node = find(root, e);
-        if (node == null) {
-            return null;
-        }
-        if (comparator.compare(node.value, e) >= 0) {
-            return node.value;
-        }
-        var nextNode = nextNode(node);
-        if (nextNode == null) {
-            return null;
-        }
-        return nextNode.value;
+        return findNextTo(e, false, false);
     }
 
     /** @inheritDoc */
     @Override
     public E higher(E e) {
+        return findNextTo(e, false, true);
+    }
+
+    private E findNextTo(E e, boolean less, boolean strict) {
         var node = find(root, e);
         if (node == null) {
             return null;
         }
-        if (comparator.compare(node.value, e) > 0) {
+        if ((!less && strict && comparator.compare(node.value, e) > 0) ||
+                (!less && !strict && comparator.compare(node.value, e) >= 0) ||
+                (less && strict && comparator.compare(node.value, e) < 0) ||
+                (less && !strict && comparator.compare(node.value, e) <= 0)) {
             return node.value;
         }
-        var nextNode = nextNode(node);
-        if (nextNode == null) {
-            return null;
+        if (!less) {
+            var nextNode = nextNode(node);
+            if (nextNode == null) {
+                return null;
+            }
+            return nextNode.value;
+        } else {
+            var previousNode = previousNode(node);
+            if (previousNode == null) {
+                return null;
+            }
+            return previousNode.value;
         }
-        return nextNode.value;
     }
 
 
@@ -314,11 +301,6 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         node.right = remove(node.right, node.value);
         return node;
     }
-
-    private Node root = null;
-    private final Comparator<? super E> comparator;
-    private int size = 0;
-    private final DescendingSet descendingSet = new DescendingSet();
 
     private class Node {
         private E value;
