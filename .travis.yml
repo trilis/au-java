@@ -2,4 +2,16 @@ matrix:
   include:
     - language: java
       jdk: openjdk11
+      before_script: cd hw1
+      
+    - language: java
+      jdk: openjdk11
       before_script: cd hw5
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test1
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test2
