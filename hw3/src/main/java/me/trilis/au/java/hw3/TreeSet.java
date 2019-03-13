@@ -12,7 +12,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     /**
      * Creates empty set with natural ordering as comparator.
      */
+    @SuppressWarnings("unchecked")
     public TreeSet() {
+        comparator = (o1, o2) -> ((Comparable<? super E>) o1).compareTo(o2);
     }
 
     /**
@@ -36,14 +38,14 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return true;
         }
         while (true) {
-            if (compare(e, currentNode.value) < 0) {
+            if (comparator.compare(e, currentNode.value) < 0) {
                 if (currentNode.left == null) {
                     currentNode.left = new Node(e,  currentNode);
                     size++;
                     return true;
                 }
                 currentNode = currentNode.left;
-            } else if (compare(e, currentNode.value) > 0) {
+            } else if (comparator.compare(e, currentNode.value) > 0) {
                 if (currentNode.right == null) {
                     currentNode.right = new Node(e,  currentNode);
                     size++;
@@ -178,7 +180,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (node == null) {
             return null;
         }
-        if (compare(node.value, e) < 0) {
+        if (comparator.compare(node.value, e) < 0) {
             return node.value;
         }
         var previousNode = previousNode(node);
@@ -197,7 +199,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (node == null) {
             return null;
         }
-        if (compare(node.value, e) <= 0) {
+        if (comparator.compare(node.value, e) <= 0) {
             return node.value;
         }
         var previousNode = previousNode(node);
@@ -216,7 +218,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (node == null) {
             return null;
         }
-        if (compare(node.value, e) >= 0) {
+        if (comparator.compare(node.value, e) >= 0) {
             return node.value;
         }
         var nextNode = nextNode(node);
@@ -235,7 +237,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (node == null) {
             return null;
         }
-        if (compare(node.value, e) > 0) {
+        if (comparator.compare(node.value, e) > 0) {
             return node.value;
         }
         var nextNode = nextNode(node);
@@ -245,15 +247,6 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return nextNode.value;
     }
 
-
-    @SuppressWarnings("unchecked")
-    private int compare(E e1, E e2) {
-        if (comparator != null) {
-            return comparator.compare(e1, e2);
-        } else {
-            return ((Comparable) e1).compareTo(e2);
-        }
-    }
 
     private Node leftmostNode() {
         var currentNode = root;
@@ -275,11 +268,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (currentNode == null) {
             return null;
         }
-        if (compare(e, currentNode.value) < 0) {
+        if (comparator.compare(e, currentNode.value) < 0) {
             if (currentNode.left != null) {
                 return find(currentNode.left, e);
             }
-        } else if (compare(e, currentNode.value) > 0) {
+        } else if (comparator.compare(e, currentNode.value) > 0) {
             if (currentNode.right != null) {
                 return find(currentNode.right, e);
             }
@@ -321,14 +314,14 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (node == null) {
             return null;
         }
-        if (compare(e, node.value) < 0) {
+        if (comparator.compare(e, node.value) < 0) {
             var newNode = remove(node.left, e);
             node.left = newNode;
             if (newNode != null) {
                 newNode.parent = node;
             }
             return node;
-        } else if (compare(e, node.value) > 0) {
+        } else if (comparator.compare(e, node.value) > 0) {
             var newNode = remove(node.right, e);
             node.right = newNode;
             if (newNode != null) {
@@ -353,7 +346,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     }
 
     private Node root = null;
-    private Comparator<E> comparator = null;
+    private final Comparator<? super E> comparator;
     private int size = 0;
     private final DescendingSet descendingSet = new DescendingSet();
 
