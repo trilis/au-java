@@ -36,15 +36,15 @@ class ReflectorTest {
         var loadedSecondClass = loadGeneratedClass(GenericClass.class);
         var out = new ByteArrayOutputStream();
         Reflector.diffClasses(loadedFirstClass, loadedSecondClass, new PrintStream(out));
-        assertEquals("Fields unique to the first class:\n" +
-                "[int w]\n" +
-                "Fields unique to the second class:\n" +
-                "[T t]\n" +
-                "Methods unique to the first class:\n" +
-                "[public java.lang.String lol(), public void foo()]\n" +
-                "Methods unique to the second class:\n" +
+        assertEquals("Fields unique to the first class:" + System.lineSeparator()  +
+                "[int w]" + System.lineSeparator()  +
+                "Fields unique to the second class:" + System.lineSeparator()  +
+                "[T t]" + System.lineSeparator()  +
+                "Methods unique to the first class:" + System.lineSeparator()  +
+                "[public java.lang.String lol(), public void foo()]" + System.lineSeparator()  +
+                "Methods unique to the second class:" + System.lineSeparator()  +
                 "[public <S> void bar(java.util.Map<? extends T, ? super S> arg0), " +
-                "public void foo(java.util.Map<T, ? super T> arg0)]\n",
+                "public void foo(java.util.Map<T, ? super T> arg0)]" + System.lineSeparator() ,
                 out.toString());
     }
 
@@ -52,112 +52,118 @@ class ReflectorTest {
     public void testBigClass() throws FileNotFoundException {
         Reflector.printStructure(BigClass.class);
         assertThat(new File("BigClass.java")).hasContent(
-            "public class BigClass {\n" +
-            "    public <T> BigClass(T arg0) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    private int a;\n" +
-            "    java.util.Set<java.lang.Integer> s;\n" +
-            "    final boolean x = false;\n" +
-            "    public static void main(int arg0, java.util.Set<?> arg1) throws java.io.FileNotFoundException, java.io.IOException {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public <S extends T, T> void generics(T arg0, S arg1) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public abstract static interface Interface {\n" +
-            "    }\n" +
-            "    private class OtherClass<T extends java.util.Set> extends java.util.ArrayList<T> implements java.util.List<T>, java.util.Set<T> {\n" +
-            "        public OtherClass(me.trilis.au.java.hw5.testclasses.BigClass arg0, java.lang.Object arg1) {\n" +
-            "            throw new UnsupportedOperationException();\n" +
-            "        }\n" +
-            "        int c;\n" +
-            "        void main(T arg0) {\n" +
-            "            throw new UnsupportedOperationException();\n" +
-            "        }\n" +
-            "    }\n" +
-            "}\n");
+            "public class BigClass {" + System.lineSeparator()  +
+            "    public <T> BigClass(T arg0) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    private int a;" + System.lineSeparator()  +
+            "    java.util.Set<java.lang.Integer> s;" + System.lineSeparator()  +
+            "    final boolean x = false;" + System.lineSeparator()  +
+            "    public static void main(int arg0, java.util.Set<?> arg1) throws java.io.FileNotFoundException, java.io.IOException {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public <S extends T, T> void generics(T arg0, S arg1) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public abstract static interface Interface {" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    private class OtherClass<T extends java.util.Set> extends java.util.ArrayList<T> implements java.util.List<T>, java.util.Set<T> {" + System.lineSeparator()  +
+            "        public OtherClass(me.trilis.au.java.hw5.testclasses.BigClass arg0, java.lang.Object arg1) {" + System.lineSeparator()  +
+            "            throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "        }" + System.lineSeparator()  +
+            "        int c;" + System.lineSeparator()  +
+            "        void main(T arg0) {" + System.lineSeparator()  +
+            "            throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "        }" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "}" + System.lineSeparator() );
+        cleanUp("BigClass.java");
     }
 
     @Test
     void testEmpty() throws FileNotFoundException {
         Reflector.printStructure(EmptyClass.class);
         assertThat(new File("EmptyClass.java")).hasContent(
-            "public class EmptyClass {\n" +
-            "    public EmptyClass() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "}\n");
+            "public class EmptyClass {" + System.lineSeparator()  +
+            "    public EmptyClass() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "}" + System.lineSeparator() );
+        cleanUp("EmptyClass.java");
     }
 
     @Test
     void testAbstract() throws FileNotFoundException {
         Reflector.printStructure(AbstractClass.class);
         assertThat(new File("AbstractClass.java")).hasContent(
-            "public abstract class AbstractClass {\n" +
-            "    public AbstractClass() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    private int v;\n" +
-            "    protected abstract void foo();\n" +
-            "    public int bar() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "}\n");
+            "public abstract class AbstractClass {" + System.lineSeparator()  +
+            "    public AbstractClass() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    private int v;" + System.lineSeparator()  +
+            "    protected abstract void foo();" + System.lineSeparator()  +
+            "    public int bar() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "}" + System.lineSeparator() );
+        cleanUp("AbstractClass.java");
     }
 
     @Test
     void testInterface() throws FileNotFoundException {
         Reflector.printStructure(Interface.class);
         assertThat(new File("Interface.java")).hasContent(
-            "public abstract interface Interface {\n" +
-            "    public abstract int bar();\n" +
-            "    public abstract java.lang.String lol();\n" +
-            "    public abstract void foo();\n" +
+            "public abstract interface Interface {" + System.lineSeparator()  +
+            "    public abstract int bar();" + System.lineSeparator()  +
+            "    public abstract java.lang.String lol();" + System.lineSeparator()  +
+            "    public abstract void foo();" + System.lineSeparator()  +
             "}");
+        cleanUp("Interface.java");
     }
 
     @Test
     void testExtendingClass() throws FileNotFoundException {
         Reflector.printStructure(ExtendingClass.class);
         assertThat(new File("ExtendingClass.java")).hasContent(
-            "public class ExtendingClass extends me.trilis.au.java.hw5.testclasses.AbstractClass implements me.trilis.au.java.hw5.testclasses.Interface {\n" +
-            "    public ExtendingClass() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    int w;\n" +
-            "    public java.lang.String lol() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public void foo() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public void lol(java.util.Set<?> arg0) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "}\n");
+            "public class ExtendingClass extends me.trilis.au.java.hw5.testclasses.AbstractClass implements me.trilis.au.java.hw5.testclasses.Interface {" + System.lineSeparator()  +
+            "    public ExtendingClass() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    int w;" + System.lineSeparator()  +
+            "    public java.lang.String lol() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public void foo() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public void lol(java.util.Set<?> arg0) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "}" + System.lineSeparator() );
+        cleanUp("ExtendingClass.java");
     }
 
     @Test
     void testGenericClass() throws FileNotFoundException {
         Reflector.printStructure(GenericClass.class);
         assertThat(new File("GenericClass.java")).hasContent(
-            "public class GenericClass<T> {\n" +
-            "    public GenericClass() {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    T t;\n" +
-            "    public <S> void bar(java.util.Map<? extends T, ? super S> arg0) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public void foo(java.util.Map<T, ? super T> arg0) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "    public void lol(java.util.Set<?> arg0) {\n" +
-            "        throw new UnsupportedOperationException();\n" +
-            "    }\n" +
-            "}\n"
+            "public class GenericClass<T> {" + System.lineSeparator()  +
+            "    public GenericClass() {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    T t;" + System.lineSeparator()  +
+            "    public <S> void bar(java.util.Map<? extends T, ? super S> arg0) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public void foo(java.util.Map<T, ? super T> arg0) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "    public void lol(java.util.Set<?> arg0) {" + System.lineSeparator()  +
+            "        throw new UnsupportedOperationException();" + System.lineSeparator()  +
+            "    }" + System.lineSeparator()  +
+            "}" + System.lineSeparator() 
         );
+        cleanUp("GenericClass.java");
     }
 
 
@@ -180,6 +186,14 @@ class ReflectorTest {
                 Collections.singletonList("-parameters"), null,
                 fileManager.getJavaFileObjects(file)).call();
         var loader = URLClassLoader.newInstance(new URL[]{new File(".").toURI().toURL()});
-        return Class.forName(clazz.getSimpleName(), true, loader);
+        var result =  Class.forName(clazz.getSimpleName(), true, loader);
+        cleanUp(clazz.getSimpleName() + ".java");
+        cleanUp(clazz.getSimpleName() + ".class");
+        return result;
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void cleanUp(String fileName) {
+        new File(fileName).delete();
     }
 }
