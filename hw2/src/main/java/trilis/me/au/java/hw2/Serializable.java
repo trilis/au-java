@@ -14,6 +14,8 @@ public interface Serializable {
      * Writes data of this trie into the specified output stream.
      *
      * @param out the specified output stream.
+     *
+     * @throws IOException if an I/O error occurs.
      */
     void serialize(OutputStream out) throws IOException;
 
