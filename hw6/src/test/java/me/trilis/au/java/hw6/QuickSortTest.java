@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static me.trilis.au.java.hw6.Main.generateList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class QuickSortTest {
@@ -45,32 +46,4 @@ class QuickSortTest {
         assertArrayEquals(answer.toArray(), list.toArray());
     }
 
-    private void testSpeed(int size) {
-        System.out.println("Size: " + size);
-        var parallelSum = 0L;
-        var nonParallelSum = 0L;
-        for (int j = 0; j < 10; j++) {
-            var firstList = generateList(size);
-            var secondList = new ArrayList<>(firstList);
-            var parallelTime = System.nanoTime();
-            QuickSort.parallelSort(firstList);
-            parallelTime = System.nanoTime() - parallelTime;
-            var nonParallelTime = System.nanoTime();
-            QuickSort.nonParallelSort(secondList);
-            nonParallelTime = System.nanoTime() - nonParallelTime;
-            parallelSum += parallelTime;
-            nonParallelSum += nonParallelTime;
-        }
-        System.out.println("AVERAGE PARALLEL TIME = " + (parallelSum / 1e9) + " s");
-        System.out.println("AVERAGE NON PARALLEL TIME = " + (nonParallelSum / 1e9) + " s");
-    }
-
-    private List<Integer> generateList(int size) {
-        Random random = new Random(size);
-        var result = new ArrayList<Integer>();
-        for (int i = 0; i < size; i++) {
-            result.add(random.nextInt());
-        }
-        return result;
-    }
 }
