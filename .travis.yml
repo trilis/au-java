@@ -1,5 +1,21 @@
-language: java
-jdk: openjdk11
-env:
-- PROJECT_DIR=hw4
-before_script: cd $PROJECT_DIR 
+matrix:
+  include:
+    - language: java
+      jdk: openjdk11
+      before_script: cd hw1
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd hw4
+
+    - language: java
+      jdk: openjdk11
+      before_script: cd test1
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test2
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test3
