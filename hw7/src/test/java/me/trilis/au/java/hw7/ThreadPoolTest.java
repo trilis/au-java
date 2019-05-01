@@ -65,6 +65,44 @@ public class ThreadPoolTest {
     }
 
     @Test
+    void testShutdown() {
+        int n = 10;
+        ThreadPool pool = new ThreadPool(n);
+        var futures = new ArrayList<LightFuture<Integer>>(n);
+        for (int i = 0; i < n; i++) {
+            futures.add(pool.addTask(() -> 0));
+        }
+        pool.shutdown();
+        assertThrows(IllegalStateException.class, () -> pool.addTask(() -> 0));
+        for (int i = 0; i < n; i++) {
+            futures.set(i, futures.get(i).thenApply((o) -> 1));
+        }
+        for (int i = 0; i < n; i++) {
+            assertFalse(futures.get(i).isReady());
+        }
+    }
+
+    @Test
+    void testIsReady() {
+        int n = 10;
+        ThreadPool pool = new ThreadPool(n);
+        var lock = new Object();
+        var futures = new ArrayList<LightFuture<Integer>>(n);
+        synchronized (lock) {
+            for (int i = 0; i < n; i++) {
+                futures.add(pool.addTask(() -> {
+                    synchronized (lock) {
+                        return 0;
+                    }
+                }));
+            }
+            for (int i = 0; i < n; i++) {
+                assertFalse(futures.get(i).isReady());
+            }
+        }
+    }
+
+    @Test
     void testNumberOfThreads() {
         testNumberOfThreads(1);
         testNumberOfThreads(10);
