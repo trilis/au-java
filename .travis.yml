@@ -8,7 +8,11 @@ matrix:
       jdk: openjdk11
       before_script: cd hw2
       
-   -  language: java
+    - language: java
+      jdk: openjdk11
+      before_script: cd hw3
+      
+    - language: java
       jdk: openjdk11
       before_script: cd hw4
 
