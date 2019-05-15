@@ -15,6 +15,10 @@ matrix:
     - language: java
       jdk: openjdk11
       before_script: cd hw4
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd hw5
 
     - language: java
       jdk: openjdk11
