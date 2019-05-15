@@ -7,6 +7,14 @@ matrix:
     - language: java
       jdk: openjdk11
       before_script: cd hw2
+      
+   -  language: java
+      jdk: openjdk11
+      before_script: cd hw4
+
+    - language: java
+      jdk: openjdk11
+      before_script: cd hw6
 
     - language: java
       jdk: openjdk11
@@ -15,3 +23,7 @@ matrix:
     - language: java
       jdk: openjdk11
       before_script: cd test2
+      
+    - language: java
+      jdk: openjdk11
+      before_script: cd test3
