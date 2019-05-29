@@ -26,44 +26,50 @@ public class Main extends Application {
                 buttons[r][c] = new Button("");
                 buttons[r][c].setMinWidth(50);
                 buttons[r][c].setMinHeight(50);
+
                 var i = r;
                 var j = c;
+
                 buttons[r][c].setOnAction(event -> {
                     for (var thread : sleepingThreads) {
                         thread.interrupt();
                     }
+                    sleepingThreads.clear();
+
                     var button = (Button) event.getSource();
                     button.setText(String.valueOf(controller.getNumber(i, j)));
+
                     var result = controller.pushButton(i, j);
                     if (result == Controller.Result.NOTHING) {
                         return;
                     }
+
                     var lastCoordinates = controller.getLastCoordinatesId();
+                    var lastButton = buttons[lastCoordinates.getKey()]
+                            [lastCoordinates.getValue()];
+
                     if (result == Controller.Result.MATCH ||
                             result == Controller.Result.WIN) {
                         button.setDisable(true);
-                        buttons[lastCoordinates.getKey()]
-                                [lastCoordinates.getValue()].setDisable(true);
+                        lastButton.setDisable(true);
                         button.setStyle("-fx-background-color: #ff0000; ");
-                        buttons[lastCoordinates.getKey()]
-                                [lastCoordinates.getValue()].setStyle("-fx-background-color: #ff0000; ");
+                        lastButton.setStyle("-fx-background-color: #ff0000; ");
                     } else {
                         var th = new Thread(() -> {
                             button.setDisable(true);
-                            buttons[lastCoordinates.getKey()]
-                                    [lastCoordinates.getValue()].setDisable(true);
+                            lastButton.setDisable(true);
+
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ignored) {
 
                             }
+
                             Platform.runLater(() -> {
                                 button.setText("");
-                                buttons[lastCoordinates.getKey()]
-                                        [lastCoordinates.getValue()].setText("");
+                                lastButton.setText("");
                                 button.setDisable(false);
-                                buttons[lastCoordinates.getKey()]
-                                        [lastCoordinates.getValue()].setDisable(false);
+                                lastButton.setDisable(false);
                             });
                         });
                         th.start();
