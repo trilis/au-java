@@ -60,7 +60,7 @@ public class TestEvaluator {
             try {
                 results = runAllTests(clazz);
             } catch (IllegalAccessException e) {
-                System.out.println("Illegal acces exception: " + e.getMessage());
+                System.out.println("Illegal access exception: " + e.getMessage());
                 continue;
             } catch (InstantiationException | NoSuchMethodException e) {
                 System.out.println("Failed to create instance of a class: " + e.getMessage());
@@ -69,9 +69,9 @@ public class TestEvaluator {
                 System.out.println("Non-test method threw exception: " + e.getTargetException().getMessage());
                 continue;
             }
-            int failed = 0;
-            int passed = 0;
-            int ignored = 0;
+            var failed = 0;
+            var passed = 0;
+            var ignored = 0;
             for (var result : results) {
                 switch (result.getType()) {
                     case IGNORED:
@@ -150,8 +150,8 @@ public class TestEvaluator {
             return TestResult.ignoredResult(test.getName(), annotation.ignore());
         }
         TestResult result = null;
-        boolean threw = false;
-        long time = System.currentTimeMillis();
+        var threw = false;
+        var time = System.currentTimeMillis();
         try {
             test.invoke(instance);
         } catch (InvocationTargetException e) {
