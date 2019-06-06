@@ -43,10 +43,13 @@ public class ThreadPool {
      * Shuts down this thread pool by interrupting all threads running at the moment.
      * All unfinished tasks will be abandoned, and no new tasks will be accepted.
      */
-    public void shutdown() {
+    public void shutdown() throws InterruptedException {
         isShutdown = true;
         for (var thread : threads) {
             thread.interrupt();
+        }
+        for (var thread : threads) {
+            thread.join();
         }
     }
 

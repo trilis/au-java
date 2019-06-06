@@ -65,7 +65,7 @@ public class ThreadPoolTest {
     }
 
     @Test
-    void testShutdown() {
+    void testShutdown() throws InterruptedException {
         int n = 10;
         var pool = new ThreadPool(n);
         var futures = new ArrayList<LightFuture<Integer>>(n);
