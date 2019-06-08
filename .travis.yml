@@ -26,6 +26,10 @@ matrix:
 
     - language: java
       jdk: openjdk11
+      before_script: cd hw9
+
+    - language: java
+      jdk: openjdk11
       before_script: cd test1
       
     - language: java
